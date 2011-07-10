@@ -69,7 +69,11 @@ MongoDB::Web - MongoDB + Moose + URI
 
 =head1 DESCRIPTION
 
-MongoDB Object Mapper that is designed to store Web Resources (ie: Object that are identified by an URI)
+MongoDB Object Mapper designed to store Web Resources.
+The objects are identified by their canonical URIs.
+The scope of this module is actually larger than the Web as by default
+any kind of URIs is accepted.
+See set_alternate_canonical_uri_maker to change this behavior.
 
 =head1 METHODS
 
