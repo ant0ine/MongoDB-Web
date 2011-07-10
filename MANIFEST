@@ -1,0 +1,17 @@
+Build.PL
+Changes
+lib/MongoDB/Web.pm
+lib/MongoDB/Web/Cursor.pm
+lib/MongoDB/Web/Property.pm
+lib/MongoDB/Web/Resource.pm
+lib/MongoDB/Web/Store.pm
+MANIFEST			This list of files
+README
+t/00-load.t
+t/01-resource-basics.t
+t/02-resource-query.t
+t/03-resource-graph.t
+t/04-canonical_uri.t
+t/pod-coverage.t
+t/pod.t
+t/WebPage.pm
