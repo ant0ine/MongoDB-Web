@@ -1,0 +1,8 @@
+* support the safe option on save and remove
+* make uri attibute unmutable
+* custom collection mapping
+* $resource->as_string
+* more POD, more tests
+* singleton store ? (+ Resource method shortcuts)
+* composite resource (one collection per role ?)
+
