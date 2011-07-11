@@ -26,13 +26,11 @@ coerce 'ArrayRefOfURI',
 
 has 'uri' => (
     traits => [qw( Property )],
-    is => 'rw',
+    is => 'ro',
     isa => 'URI',
     required => 1,
     coerce => 1,
 );
-
-# TODO make it unmutable
 
 =head1 NAME
 
