@@ -1,6 +1,7 @@
 package WebPage;
 use Moose;
 extends 'MongoDB::Web::Resource';
+with 'MongoDB::Web::Store::Shortcuts';
 
 has 'title' => (
     traits => [qw( Property )],
