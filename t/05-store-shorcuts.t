@@ -49,6 +49,6 @@ is $cursor->class, 'WebPage';
 is $cursor->count, 1, '1 page';
 
 note 'remove';
-ok $page->remove, 'remove';
+ok $same->remove, 'remove';
 is( WebPage->find( {} )->count, 0, 'removed');
 

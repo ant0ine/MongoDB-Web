@@ -32,6 +32,12 @@ has 'uri' => (
     coerce => 1,
 );
 
+has '_id' => (
+    traits => [qw( Property )],
+    is => 'ro',
+    isa => 'Object',
+);
+
 =head1 NAME
 
 MongoDB::Web::Resource
@@ -73,7 +79,12 @@ sub document {
         $meta->get_all_attributes;
 
     my %document;
-    $document{$_->name} = $_->get_value($self) for @properties;
+    for (@properties) {
+        my $name = $_->name;
+        my $value = $_->get_value($self);
+        next unless defined $value;
+        $document{$name} = $value;
+    }
     return \%document;
 }
 
@@ -84,7 +95,7 @@ sub document {
 sub new_from_document {
     my $class = shift;
     my ($doc) = @_;
-    return bless $doc, $class;
+    return $class->new($doc);
 }
 
 1;
