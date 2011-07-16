@@ -100,6 +100,28 @@ sub find {
     return $class->_get_store->find( $class => @_ );
 }
 
+=head2 $class->ensure_index( ... )
+
+Short for $store->ensure_index($class => ...)
+
+=cut
+
+sub ensure_index {
+    my $class = shift;
+    return $class->_get_store->ensure_index($class => @_);
+}
+
+=head2 $class->drop_index( ... )
+
+Short for $store->drop_index($class => ...)
+
+=cut
+
+sub drop_index {
+    my $class = shift;
+    return $class->_get_store->drop_index($class => @_);
+}
+
 =head2 $self->load( $property )
 
 Short for $store->load( $self => $property )
