@@ -111,7 +111,7 @@ Return a cursor.
 sub load_referers {
     my $self = shift;
     my $class = shift or die 'class required';
-    die "class must inherit from MongoDB::Web::Resource"
+    die "class $class must inherit from MongoDB::Web::Resource"
         unless $class->isa('MongoDB::Web::Resource');
     my $property = shift or die 'property required';
     my $resource = shift or die 'resource required';
