@@ -98,4 +98,6 @@ sub new_from_document {
     return $class->new($doc);
 }
 
+__PACKAGE__->meta->make_immutable;
+
 1;
