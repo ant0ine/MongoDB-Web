@@ -97,7 +97,7 @@ sub load {
         return $self->load_by_uri( $class => $uri );
     }
     else {
-        my $uris = $attr->get_value($resource);
+        my $uris = $attr->get_value($resource) || [];
         return $self->find($class => { uri => { '$in' => $uris } });
     }
 }
