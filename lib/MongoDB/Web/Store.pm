@@ -88,7 +88,8 @@ sub load {
     die 'type must be URI or ArrayRefOfURI'
         unless $type eq 'URI' || $type eq 'ArrayRefOfURI';
 
-    my $class = $attr->uri_isa;
+    my $class = $attr->uri_isa
+        or die "uri_isa not specified, cannot use load()";
     die "class must inherit from MongoDB::Web::Resource"
         unless $class->isa('MongoDB::Web::Resource');
 
