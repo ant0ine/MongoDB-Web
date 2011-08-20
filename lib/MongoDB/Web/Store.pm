@@ -94,7 +94,8 @@ sub load {
         unless $class->isa('MongoDB::Web::Resource');
 
     if ($type eq 'URI') {
-        my $uri = $attr->get_value($resource);
+        my $uri = $attr->get_value($resource)
+            or die "URI attribute $property has no value";
         return $self->load_by_uri( $class => $uri );
     }
     else {
