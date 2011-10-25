@@ -126,7 +126,7 @@ sub load_referers {
 
 =head2 $self->find( $class => $query )
 
-Return a cursor.
+Return a MongoDB::Web::Cursor.
 
 =cut
 
@@ -137,6 +137,34 @@ sub find {
     my $c = $self->class_to_collection($class);
     my $cursor = $c->find($query);
     return MongoDB::Web::Cursor->new(cursor => $cursor, class => $class);
+}
+
+=head2 $self->find_uri( $class => $query )
+
+Same parameters as the find method, but returns an arrayref of uris.
+
+=cut
+
+sub find_uri {
+    my $self = shift;
+    my $class = shift or die 'class required';
+    my $query = shift or die 'query required';
+    my $c = $self->class_to_collection($class);
+    return [ map { $_->{uri} } $c->find($query, { uri => 1 })->all ];
+}
+
+=head2 $self->find_mongodb_id( $class => $query )
+
+Same parameters as the find method, but returns an arrayref of mongodb ids.
+
+=cut
+
+sub find_mongodb_id {
+    my $self = shift;
+    my $class = shift or die 'class required';
+    my $query = shift or die 'query required';
+    my $c = $self->class_to_collection($class);
+    return [ map { $_->{_id}->value } $c->find($query, { _id => 1 })->all ];
 }
 
 =head2 $self->save( $resource )
@@ -158,7 +186,7 @@ sub save {
     );
 }
 
-=head2 $self->remove($resource);
+=head2 $self->remove($resource)
 
 =cut
 

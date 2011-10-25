@@ -1,5 +1,5 @@
 #!perl -T
-use Test::More tests => 12;
+use Test::More tests => 16;
 use strict;
 use warnings;
 use lib 't';
@@ -47,6 +47,16 @@ isa_ok $cursor, 'MongoDB::Web::Cursor';
 isa_ok $cursor->cursor, 'MongoDB::Cursor';
 is $cursor->class, 'WebPage';
 is $cursor->count, 1, '1 page';
+
+note 'find_uri';
+my $list = WebPage->find_uri( {} );
+isa_ok $list, 'ARRAY';
+is_deeply $list, [ $page->uri ], 'correct list';
+
+note 'find_mongodb_id';
+$list = WebPage->find_mongodb_id( {} );
+isa_ok $list, 'ARRAY';
+is_deeply $list, [ $same->mongodb_id ], 'correct list';
 
 note 'remove';
 ok $same->remove, 'remove';

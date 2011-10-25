@@ -100,6 +100,28 @@ sub find {
     return $class->_get_store->find( $class => @_ );
 }
 
+=head2 $class->find_uri( $query )
+
+Short for $store->find_uri( $class => $query )
+
+=cut
+
+sub find_uri {
+    my $class = shift;
+    return $class->_get_store->find_uri( $class => @_ );
+}
+
+=head2 $class->find_mongodb_id( $query )
+
+Short for $store->find_mongodb_id( $class => $query )
+
+=cut
+
+sub find_mongodb_id {
+    my $class = shift;
+    return $class->_get_store->find_mongodb_id( $class => @_ );
+}
+
 =head2 $class->ensure_index( ... )
 
 Short for $store->ensure_index($class => ...)
