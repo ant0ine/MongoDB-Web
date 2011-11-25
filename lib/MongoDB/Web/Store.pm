@@ -106,6 +106,7 @@ sub load {
 
 =head2 $self->load_referers( $class => $property => $resource )
 
+Note the misspelling inherited from the HTTP rfc. It's MongoDB-Web after all :)
 Return a cursor.
 
 =cut
