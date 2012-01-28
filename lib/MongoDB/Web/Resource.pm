@@ -74,7 +74,7 @@ sub document {
     my $self = shift;
     my $meta = $self->meta;
 
-    my @properties = 
+    my @properties =
         grep { $_->does('MongoDB::Web::Property') }
         $meta->get_all_attributes;
 

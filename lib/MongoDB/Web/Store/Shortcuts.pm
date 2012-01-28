@@ -35,7 +35,7 @@ my %class2store;
 =head2 $class->set_store( $store )
 
 Tell this role which store to use for this class.
-To prevent error, the store can be set only once. 
+To prevent error, the store can be set only once.
 
 =cut
 
@@ -120,6 +120,28 @@ Short for $store->find_mongodb_id( $class => $query )
 sub find_mongodb_id {
     my $class = shift;
     return $class->_get_store->find_mongodb_id( $class => @_ );
+}
+
+=head2 $class->raw_find( $query => $props )
+
+Short for $store->raw_find( $class => $query => $props )
+
+=cut
+
+sub raw_find {
+    my $class = shift;
+    return $class->_get_store->raw_find( $class => @_ );
+}
+
+=head2 $class->raw_update( $mongodb_id => $props )
+
+Short for $store->raw_update( $class => $mongodb_id => $props )
+
+=cut
+
+sub raw_update {
+    my $class = shift;
+    return $class->_get_store->raw_update( $class => @_ );
 }
 
 =head2 $class->ensure_index( ... )

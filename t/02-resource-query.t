@@ -1,5 +1,5 @@
 #!perl -T
-use Test::More tests => 21;
+use Test::More tests => 26;
 use strict;
 use lib 't';
 
@@ -97,6 +97,19 @@ note "skip, limit, or, reset, sort";
     my $first = $cursor->next;
     isa_ok $first, 'WebPage';
     is $first->title, 'title3', 'order by title desc';
+}
+
+note "raw_find";
+{
+    # just retrieve the title
+    my $cursor = $store->raw_find(WebPage => {})->fields({ title => 1});
+    isa_ok($cursor, 'MongoDB::Cursor');
+    is $cursor->count, 3, '3 results';
+
+    my $doc = $cursor->next;
+    isa_ok $doc, 'HASH';
+    ok exists $doc->{title}, 'has title';
+    ok !exists $doc->{uri}, 'has no uri';
 }
 
 $store->remove($page1);

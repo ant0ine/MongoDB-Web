@@ -1,5 +1,5 @@
 #!perl -T
-use Test::More tests => 36;
+use Test::More tests => 37;
 use strict;
 use warnings;
 use lib 't';
@@ -82,6 +82,11 @@ note 'find_mongodb_id';
 $list = $store->find_mongodb_id( WebPage => {} );
 isa_ok $list, 'ARRAY';
 is_deeply $list, [ $same->mongodb_id ], 'correct list';
+
+note 'raw_update';
+$store->raw_update(WebPage => $more->mongodb_id => { title => 'updated' });
+my $updated = $store->load_by_mongodb_id( WebPage => $more->mongodb_id );
+is $updated->title, 'updated', 'title';
 
 note 'unique uri index';
 

@@ -19,7 +19,7 @@ has 'database' => (
  my $store = MongoDB::Web::Store->new(
      database => MongoDB::Connection->new(host => 'localhost', port => 27017)->test_web
  );
- 
+
 =head1 DESCRIPTION
 
 =head1 METHODS
@@ -84,7 +84,7 @@ sub load {
     my $attr = $resource->meta->find_attribute_by_name( $property )
         or die 'property not found';
     my $type = $attr->type_constraint->name;
-    
+
     die 'type must be URI or ArrayRefOfURI'
         unless $type eq 'URI' || $type eq 'ArrayRefOfURI';
 
@@ -127,17 +127,48 @@ sub load_referers {
 
 =head2 $self->find( $class => $query )
 
-Return a MongoDB::Web::Cursor.
+Return a MongoDB::Web::Cursor that will instanciate the objects from the documents.
 
 =cut
 
 sub find {
     my $self = shift;
     my $class = shift or die 'class required';
+    my $cursor = $self->raw_find($class => @_);
+    return MongoDB::Web::Cursor->new(cursor => $cursor, class => $class);
+}
+
+=head2 $self->raw_find( $class => $query )
+
+Same as find, but return a MongoDB::Cursor instead of a Mongo::Web::Cursor.
+
+This is useful if you want to retrieve only a few properties from a document.
+eg: $self->raw_find( $class => $query )->fields( ... )
+
+=cut
+
+sub raw_find {
+    my $self = shift;
+    my $class = shift or die 'class required';
     my $query = shift or die 'query required';
     my $c = $self->class_to_collection($class);
-    my $cursor = $c->find($query);
-    return MongoDB::Web::Cursor->new(cursor => $cursor, class => $class);
+    return $c->find($query);
+}
+
+=head2 $self->raw_update( $class => $mongodb_id => $properties)
+
+Perform and atomic, in-place update, given a mongodb_id and a set of properties.
+
+=cut
+
+sub raw_update {
+    my $self = shift;
+    my $class = shift or die 'class required';
+    my $id = shift or die 'id required';
+    my $props = shift or die 'properties required';
+    my $c = $self->class_to_collection($class);
+    my $oid = MongoDB::OID->new( value => $id );
+    $c->update({ _id => $oid }, { '$set' => $props });
 }
 
 =head2 $self->find_uri( $class => $query )
@@ -169,6 +200,8 @@ sub find_mongodb_id {
 }
 
 =head2 $self->save( $resource )
+
+Convert the object into a document, and upsert it into the right collection.
 
 =cut
 
