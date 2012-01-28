@@ -5,13 +5,13 @@ has 'cursor' => (
     is => 'rw',
     isa => 'MongoDB::Cursor',
     required => 1,
-); 
+);
 
 has 'class' => (
     is => 'rw',
     isa => 'Str',
     required => 1,
-); 
+);
 
 =head1 METHODS
 
@@ -22,7 +22,7 @@ has 'class' => (
 =cut
 
 sub next {
-    my $self = shift;    
+    my $self = shift;
     my $doc = $self->cursor->next;
     return unless $doc;
     my $class = $self->class;

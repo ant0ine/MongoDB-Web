@@ -51,7 +51,7 @@ note "index queries";
 {
     my $cursor = $store->find( WebPage => { title => 'title1' });
     ok $cursor->explain->{cursor} =~ /BasicCursor/, 'no index used';
-    
+
     # add an index on title
     $store->ensure_index(WebPage => { title => 1}, { name => 'test_index', safe => 1 });
     $cursor = $store->find( WebPage => { title => 'title1' });

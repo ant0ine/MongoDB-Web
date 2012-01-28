@@ -37,7 +37,7 @@ isa_ok $same, 'WebPage';
 is $same->uri, $page->uri, 'uri';
 
 note 'load_by_mongodb_id';
-my $more = WebPage->load_by_mongodb_id( $same->mongodb_id ); 
+my $more = WebPage->load_by_mongodb_id( $same->mongodb_id );
 isa_ok $more, 'WebPage';
 is $more->uri, $page->uri, 'uri';
 

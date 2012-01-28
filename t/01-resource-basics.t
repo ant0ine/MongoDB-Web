@@ -59,7 +59,7 @@ is $same->is_fresh, undef, 'is_fresh is not stored';
 ok $same->mongodb_id, 'has mongodb_id';
 
 note 'load_by_mongodb_id';
-my $more = $store->load_by_mongodb_id( WebPage => $same->mongodb_id ); 
+my $more = $store->load_by_mongodb_id( WebPage => $same->mongodb_id );
 isa_ok $more, 'MongoDB::Web::Resource';
 isa_ok $more, 'WebPage';
 is $more->uri, 'http://example.org/', 'uri';
