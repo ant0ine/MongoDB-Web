@@ -95,7 +95,22 @@ sub document {
 sub new_from_document {
     my $class = shift;
     my ($doc) = @_;
-    return $class->new($doc);
+
+    # the objects stored in the db have already been validated.
+    # don't use the Moose constructor that rerun all this
+    # validation/coercion.
+    my $self = bless $doc, $class;
+
+    # but for the non stored attributes, apply the defaults.
+    my $meta = $self->meta;
+
+    my @others =
+        grep { ! $_->does('MongoDB::Web::Property') }
+        $meta->get_all_attributes;
+
+    $_->initialize_instance_slot($meta, $self) for @others;
+
+    return $self;
 }
 
 __PACKAGE__->meta->make_immutable;

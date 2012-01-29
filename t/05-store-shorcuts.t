@@ -1,5 +1,5 @@
 #!perl -T
-use Test::More tests => 16;
+use Test::More tests => 18;
 use strict;
 use warnings;
 use lib 't';
@@ -35,11 +35,13 @@ note 'load_by_uri';
 my $same = WebPage->load_by_uri( $page->uri );
 isa_ok $same, 'WebPage';
 is $same->uri, $page->uri, 'uri';
+is $same->store_access, 1, 'the default has been applied by new_from_document';
 
 note 'load_by_mongodb_id';
 my $more = WebPage->load_by_mongodb_id( $same->mongodb_id );
 isa_ok $more, 'WebPage';
 is $more->uri, $page->uri, 'uri';
+is $more->store_access, 1, 'the default has been applied by new_from_document';
 
 note 'find';
 my $cursor = WebPage->find( {} );
