@@ -46,6 +46,8 @@ MongoDB::Web::Resource
 
 =head1 DESCRIPTION
 
+Note that the Moose attributes are cached to improve performance. The cache is filled at first use, after that the class is unmutable.
+
 =head1 METHODS
 
 =head2 $class->new( uri => $uri )
@@ -72,14 +74,10 @@ sub mongodb_id {
 
 sub document {
     my $self = shift;
-    my $meta = $self->meta;
-
-    my @properties =
-        grep { $_->does('MongoDB::Web::Property') }
-        $meta->get_all_attributes;
+    my $class = ref $self;
 
     my %document;
-    for (@properties) {
+    for (@{ $class->_get_property_attributes }) {
         my $name = $_->name;
         my $value = $_->get_value($self);
         next unless defined $value;
@@ -101,16 +99,43 @@ sub new_from_document {
     # validation/coercion.
     my $self = bless $doc, $class;
 
+    my $meta = $class->meta;
     # but for the non stored attributes, apply the defaults.
-    my $meta = $self->meta;
-
-    my @others =
-        grep { ! $_->does('MongoDB::Web::Property') }
-        $meta->get_all_attributes;
-
-    $_->initialize_instance_slot($meta, $self) for @others;
+    $_->initialize_instance_slot($meta, $self)
+        for @{ $class->_get_other_attributes };
 
     return $self;
+}
+
+my $Attr_cache = {};
+
+sub _warm_attr_cache {
+    my $class = shift;
+    my $meta = $class->meta;
+    $Attr_cache->{$class} = {
+        prop => [],
+        other => [],
+    };
+    for my $attr ($meta->get_all_attributes) {
+        if ($attr->does('MongoDB::Web::Property')) {
+            push @{ $Attr_cache->{$class}{prop} }, $attr;
+        }
+        else {
+            push @{ $Attr_cache->{$class}{other} }, $attr;
+        }
+    }
+}
+
+sub _get_property_attributes {
+    my $class = shift;
+    $class->_warm_attr_cache unless $Attr_cache->{$class};
+    return $Attr_cache->{$class}{prop};
+}
+
+sub _get_other_attributes {
+    my $class = shift;
+    $class->_warm_attr_cache unless $Attr_cache->{$class};
+    return $Attr_cache->{$class}{other};
 }
 
 __PACKAGE__->meta->make_immutable;
