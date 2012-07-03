@@ -181,7 +181,12 @@ sub find_uri {
     my $self = shift;
     my $class = shift or die 'class required';
     my $query = shift or die 'query required';
-    return [ map { $_->{uri} } $self->raw_find($class => $query, { uri => 1 })->all ];
+    return [
+        map { $_->{uri} }
+        $self->raw_find($class => $query)
+            ->fields({ uri => 1 })
+            ->all
+    ];
 }
 
 =head2 $self->find_mongodb_id( $class => $query )
@@ -194,7 +199,12 @@ sub find_mongodb_id {
     my $self = shift;
     my $class = shift or die 'class required';
     my $query = shift or die 'query required';
-    return [ map { $_->{_id}->value } $self->raw_find($class => $query, { _id => 1 })->all ];
+    return [
+        map { $_->{_id}->value }
+        $self->raw_find($class => $query)
+            ->fields({ _id => 1 })
+            ->all
+    ];
 }
 
 =head2 $self->save( $resource )
